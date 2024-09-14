@@ -10,7 +10,7 @@ init:
 
 .PHONY: install
 install:
-	composer install
+	make composer install
 
 .PHONY: setup
 setup:
@@ -30,23 +30,23 @@ qa: cs phpstan
 
 .PHONY: cs
 cs:
-	vendor/bin/codesniffer app tests
+	make console vendor/bin/codesniffer app tests
 
 .PHONY: csf
 csf:
-	vendor/bin/codefixer app tests
+	make console vendor/bin/codefixer app tests
 
 .PHONY: phpstan
 phpstan:
-	vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=512M
+	make console vendor/bin/phpstan analyse -c phpstan.neon --memory-limit=512M
 
 .PHONY: tests
 tests:
-	vendor/bin/tester -s -p php --colors 1 -C tests
+	make console vendor/bin/tester -s -p php --colors 1 -C tests
 
 .PHONY: coverage
 coverage:
-	vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.xml --coverage-src ./app tests
+	make console vendor/bin/tester -s -p phpdbg --colors 1 -C --coverage ./coverage.xml --coverage-src ./app tests
 
 .PHONY: dev
 dev:
@@ -54,9 +54,9 @@ dev:
 
 .PHONY: build
 build:
-	NETTE_DEBUG=1 bin/console orm:schema-tool:drop --force --full-database
-	NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
-	NETTE_DEBUG=1 bin/console doctrine:fixtures:load --no-interaction --append
+	make console NETTE_DEBUG=1 bin/console orm:schema-tool:drop --force --full-database
+	make console NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
+	make console NETTE_DEBUG=1 bin/console doctrine:fixtures:load --no-interaction --append
 
 ############################################################
 # DEPLOYMENT ###############################################
@@ -86,3 +86,13 @@ docker-adminer:
 		-it \
 		-p 9999:80 \
 		dockette/adminer:dg
+
+start:
+	docker-compose up -d
+
+composer:
+	docker compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
+
+console:
+	docker compose exec php console $(filter-out $@,$(MAKECMDGOALS))
+
