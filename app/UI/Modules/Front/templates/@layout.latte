@@ -7,18 +7,18 @@
 {/}
 
 {block #main}
-	<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-		<header class="masthead mb-auto">
+	<div class="container">
+		<header class="masthead">
 			<div class="inner">
-				<h3 class="masthead-brand">Synthetic Magazine</h3>
+				<h3 class="masthead-brand" title="Synthetic Magazine"><img src="/favicon-32x32.png" alt=""></h3>
 				<nav class="nav nav-masthead justify-content-center">
 					<a n:class="$presenter->isLinkCurrent(':Front:Home:') ? active, nav-link" n:href=":Front:Home:">Home</a>
 				</nav>
 			</div>
 		</header>
 
-		<main role="main" class="inner cover">
-			<h1 class="cover-heading">Synthetic Magazine</h1>
+		<main role="main" class="inner">
+			{include content}
 		</main>
 
 		<footer class="mastfoot mt-auto">
