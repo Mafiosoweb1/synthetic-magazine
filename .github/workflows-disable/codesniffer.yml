@@ -12,4 +12,4 @@ on:
 jobs:
   codesniffer:
     name: "Codesniffer"
-    uses: contributte/.github/.github/workflows/codesniffer.yml@v1
+    uses: contributte/.github/.github/workflows-disable/codesniffer.yml@v1

@@ -3,7 +3,7 @@ parameters:
 
 	# Database
 	database:
-		host: 0.0.0.0
+		host: database
 		dbname: contributte
 		user: contributte
 		password: contributte

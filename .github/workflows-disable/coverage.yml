@@ -12,6 +12,6 @@ on:
 jobs:
   coverage:
     name: "Phpunit"
-    uses: contributte/.github/.github/workflows/phpunit-coverage.yml@v1
+    uses: contributte/.github/.github/workflows-disable/phpunit-coverage.yml@v1
     with:
       make: "init coverage"
