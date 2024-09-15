@@ -1,0 +1,13 @@
+# Development Config
+includes:
+	- base.neon
+
+
+# Nettrine ===================
+nettrine.cache:
+#	driver: Doctrine\Common\Cache\ApcuCache
+
+
+# Services ===================
+services:
+#	mail.mailer: Contributte\Mail\Mailer\TraceableMailer(Contributte\Mail\Mailer\FileMailer(%tempDir%/mails))

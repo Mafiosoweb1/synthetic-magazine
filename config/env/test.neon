@@ -1,0 +1,31 @@
+# Test Config
+includes:
+	- base.neon
+
+
+# Post/Mailing ===============
+contributte.post:
+
+# Nettrine ===================
+nettrine.orm:
+	configuration:
+		autoGenerateProxyClasses: ::constant(Doctrine\Common\Proxy\AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS)
+
+nettrine.cache:
+	driver: Doctrine\Common\Cache\ArrayCache
+
+
+# Services ===================
+services:
+	security.userStorage: Tests\Toolkit\Nette\DummyUserStorage
+
+	mail.mailer: Contributte\Mail\Mailer\FileMailer(%appDir%/../tests/tmp/mails)
+
+# Parameters =================
+parameters:
+	database:
+		driver: pdo_sqlite
+		host: test
+		dbname: test
+		user: test
+		password: test

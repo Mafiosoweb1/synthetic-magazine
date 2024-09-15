@@ -1,0 +1,42 @@
+# Extension > Contributte
+#
+extensions:
+	contributte.console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+	contributte.console.extra: Contributte\Console\Extra\DI\ConsoleBridgesExtension(%consoleMode%)
+	contributte.events: Contributte\EventDispatcher\DI\EventDispatcherExtension
+	contributte.events2nette: Contributte\Events\Extra\DI\EventBridgesExtension
+	contributte.monolog: Contributte\Monolog\DI\MonologExtension
+	contributte.mailing: Contributte\Mailing\DI\MailingExtension
+	contributte.post: Contributte\Mail\DI\MailExtension
+
+contributte.events:
+	debug: %debugMode%
+
+contributte.console:
+	url: http://localhost/
+
+contributte.mailing:
+	template:
+		config:
+			layout: %appDir%/resources/mail/@layout.latte
+
+contributte.monolog:
+	holder:
+		enabled: true
+	hook:
+		toTracy: false
+	channel:
+		default:
+			handlers:
+				- Monolog\Handler\RotatingFileHandler(%appDir%/../var/log/syslog.log, 30, Monolog\Logger::WARNING)
+			processors:
+				- Monolog\Processor\WebProcessor()
+				- Monolog\Processor\IntrospectionProcessor()
+				- Monolog\Processor\MemoryPeakUsageProcessor()
+				- Monolog\Processor\ProcessIdProcessor()
+
+services:
+		-
+			factory: Contributte\PdfResponse\PdfResponse
+			setup:
+				- $mpdfConfig([tempDir: %tempDir%/mpdf])

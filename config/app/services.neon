@@ -1,0 +1,43 @@
+# Services
+#
+services:
+	# Forms ===================
+	- App\UI\Form\FormFactory
+
+	# Latte ===================
+	latte.latteFactory:
+		setup:
+			- addFilter(datetime, App\Model\Latte\Filters::datetime)
+			- addFilter(neon, App\Model\Latte\Filters::neon)
+			- addFilter(json, App\Model\Latte\Filters::json)
+
+	latte.templateFactory:
+		class: App\Model\Latte\TemplateFactory
+
+	# Security ================
+	nette.userStorage:
+		setup:
+			- setNamespace("Webapp")
+
+	security.passwords: App\Model\Security\Passwords
+	security.user: App\Model\Security\SecurityUser
+	security.authenticator: App\Model\Security\Authenticator\UserAuthenticator
+	security.authorizator: App\Model\Security\Authorizator\StaticAuthorizator
+
+	# Routing ================
+	- App\Model\Router\RouterFactory
+	router:
+		type: Nette\Application\IRouter
+		factory: @App\Model\Router\RouterFactory::create
+
+	# Domain =================
+	- App\Domain\User\CreateUserFacade
+
+	# Console ================
+	- App\Console\HelloCommand
+
+	- App\Model\Database\QueryManager
+
+latte:
+	macros:
+		- App\Model\Latte\Macros::register
