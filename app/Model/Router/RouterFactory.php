@@ -17,7 +17,6 @@ final class RouterFactory
 	public function create(): RouteList
 	{
 		$this->buildMailing();
-		$this->buildPdf();
 		$this->buildAdmin();
 		$this->buildFront();
 
@@ -40,12 +39,6 @@ final class RouterFactory
 	{
 		$this->router[] = $list = new RouteList('Mailing');
 		$list->addRoute('mailing/<presenter>/<action>[/<id>]', 'Home:default');
-	}
-
-	protected function buildPdf(): void
-	{
-		$this->router[] = $list = new RouteList('Pdf');
-		$list->addRoute('pdf/<presenter>/<action>[/<id>]', 'Home:default');
 	}
 
 }

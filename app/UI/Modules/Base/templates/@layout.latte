@@ -7,7 +7,7 @@
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
 
 	<!-- Seo -->
-	<title>{block #title|stripHtml|trim}Webapp Skeleton{/} | Contributte</title>
+	<title>{block #title|stripHtml|trim}Synthetic Magazine{/block} | Contributte</title>
 
 	<!-- Meta -->
 	<meta name="description" n:ifset="#description" content="{include #description}">
@@ -16,13 +16,13 @@
 	<meta name="googlebot" content="snippet,archive">
 	<meta name="author" content="f3l1x">
 
-	{block #head}{/}
+	{block #head}{/block}
 </head>
 <body>
 {block #main}
 	<div class="container">
 		{include #content}
 	</div>
-{/}
+{/block}
 </body>
 </html>
