@@ -6,7 +6,6 @@ extensions:
 	contributte.events: Contributte\EventDispatcher\DI\EventDispatcherExtension
 	contributte.events2nette: Contributte\Events\Extra\DI\EventBridgesExtension
 	contributte.monolog: Contributte\Monolog\DI\MonologExtension
-	contributte.mailing: Contributte\Mailing\DI\MailingExtension
 	contributte.post: Contributte\Mail\DI\MailExtension
 
 contributte.events:
@@ -14,11 +13,6 @@ contributte.events:
 
 contributte.console:
 	url: http://localhost/
-
-contributte.mailing:
-	template:
-		config:
-			layout: %appDir%/resources/mail/@layout.latte
 
 contributte.monolog:
 	holder:

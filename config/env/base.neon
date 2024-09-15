@@ -38,8 +38,6 @@ application:
 	mapping:
 		Admin: [App\UI\Modules\Admin, *, *\*Presenter]
 		Front: [App\UI\Modules\Front, *, *\*Presenter]
-		Mailing: [App\UI\Modules\Mailing, *, *\*Presenter]
-		Pdf: [App\UI\Modules\Pdf, *, *\*Presenter]
 
 di:
 	debugger: true
