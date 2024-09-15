@@ -110,3 +110,9 @@ clear-cache:
 
 cc:
 	rm -rf var/tmp/cache/*
+
+
+
+# Toto pravidlo zajistí, že neznámé cíle nevyvolají chybu
+%:
+  @:
