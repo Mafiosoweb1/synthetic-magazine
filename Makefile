@@ -94,5 +94,5 @@ composer:
 	docker compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
 
 console:
-	docker compose exec php console $(filter-out $@,$(MAKECMDGOALS))
+	docker compose exec php  php /var/www/html/bin/console $(filter-out $@,$(MAKECMDGOALS))
 
