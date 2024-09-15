@@ -83,6 +83,7 @@ class ArticleGenerateCommand extends Command
 
 		$article->setHeading($resultText['heading']);
 		$article->setContent($resultText['content']);
+		$article->setStatus(Article::STATUS_PUBLISHED);
 		$article->setUpdatedAt();
 
 		$this->entityManager->persist($article);
