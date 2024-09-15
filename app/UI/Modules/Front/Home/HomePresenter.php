@@ -12,7 +12,6 @@ final class HomePresenter extends BaseFrontPresenter
 	 */
 	public function actionDefault(): void
 	{
-		//if header is not empty
 		$articles = $this->entityManager->getArticleRepository()->findBy([], ['updatedAt' => 'DESC'], 10);
 		$this->getTemplate()->articles = $articles;
 	}
