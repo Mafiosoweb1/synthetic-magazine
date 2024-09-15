@@ -96,3 +96,8 @@ composer:
 console:
 	docker compose exec php  php /var/www/html/bin/console $(filter-out $@,$(MAKECMDGOALS))
 
+clear-cache:
+	make cc
+
+cc:
+	rm -rf var/tmp/cache/*
