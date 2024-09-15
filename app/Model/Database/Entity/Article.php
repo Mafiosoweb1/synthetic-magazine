@@ -16,6 +16,11 @@ class Article extends AbstractEntity
 	use TCreatedAt;
 	use TUpdatedAt;
 
+	public const STATUS_CONCEPT = 0;
+	public const STATUS_CANCEL = 8;
+	public const STATUS_PUBLISHED = 9;
+
+
 
 	/** @ORM\Column(type="string", length=255, nullable=FALSE, unique=false) */
 	private string $heading;
@@ -25,6 +30,9 @@ class Article extends AbstractEntity
 
 	/** @ORM\Column(type="text", nullable=FALSE, unique=false) */
 	private string $sourceContent;
+
+	/** @ORM\Column(type="integer", nullable=FALSE, unique=false, options={"default":0}) */
+	private int $status = 0;
 
 	public function getHeading(): string
 	{
@@ -59,5 +67,15 @@ class Article extends AbstractEntity
 		return $this;
 	}
 
+	public function getStatus(): int
+	{
+		return $this->status;
+	}
+
+	public function setStatus(int $status): Article
+	{
+		$this->status = $status;
+		return $this;
+	}
 
 }
