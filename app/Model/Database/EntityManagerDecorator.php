@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database;
 
@@ -6,5 +6,5 @@ use Doctrine\ORM\Decorator\EntityManagerDecorator as DoctrineEntityManagerDecora
 
 class EntityManagerDecorator extends DoctrineEntityManagerDecorator
 {
-
+	use TRepositories;
 }

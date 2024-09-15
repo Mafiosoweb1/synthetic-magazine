@@ -35,6 +35,7 @@ services:
 
 	# Console ================
 	- App\Console\HelloCommand
+	- App\Console\ArticleGenerateCommand
 
 	- App\Model\Database\QueryManager
 
