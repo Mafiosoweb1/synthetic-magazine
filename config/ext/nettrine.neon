@@ -38,6 +38,7 @@ nettrine.orm:
 nettrine.orm.annotations:
 	mapping:
 		App\Domain: %appDir%/Domain
+		App\Model\Database\Entity: %appDir%/Model/Database/Entity
 
 nettrine.migrations:
 	table: doctrine_migrations

@@ -23,7 +23,7 @@ class Article extends AbstractEntity
 	/** @ORM\Column(type="text", nullable=FALSE, unique=false) */
 	private string $content;
 
-	/** @ORM\Column(type="text", nullable=FALSE, unique=TRUE) */
+	/** @ORM\Column(type="text", nullable=FALSE, unique=false) */
 	private string $sourceContent;
 
 	public function getHeading(): string
