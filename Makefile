@@ -90,8 +90,17 @@ docker-adminer:
 start:
 	docker-compose up -d
 
+stop:
+	docker-compose stop
+
+down:
+	docker-compose down
+
 composer:
 	docker compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
+
+bash:
+	docker compose exec php bash
 
 console:
 	docker compose exec php  php /var/www/html/bin/console $(filter-out $@,$(MAKECMDGOALS))
