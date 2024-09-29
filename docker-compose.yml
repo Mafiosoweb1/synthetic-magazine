@@ -34,8 +34,8 @@ services:
       PHP_EXTENSION_GD: 1
       PHP_EXTENSION_INTL: 1
       STARTUP_COMMAND_1: composer install
-      STARTUP_COMMAND_2: NETTE_DEBUG=1 php bin/console migrations:migrate --no-interaction --allow-no-migration
-      STARTUP_COMMAND_3: NETTE_DEBUG=1 php bin/console doctrine:fixtures:load --no-interaction
+      #STARTUP_COMMAND_2: NETTE_DEBUG=1 php bin/console migrations:migrate --no-interaction --allow-no-migration
+      #STARTUP_COMMAND_3: NETTE_DEBUG=1 php bin/console doctrine:fixtures:load --no-interaction
 
   database:
     image: dockette/postgres:10
@@ -44,7 +44,7 @@ services:
       - POSTGRES_USER=contributte
       - POSTGRES_DB=contributte
     volumes:
-      - .docker/data/postgres:/var/lib/postgresql/data
+      - ../docker/postgres:/var/lib/postgresql/data
     ports:
         - 5432:5432
 
