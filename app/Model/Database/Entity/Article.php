@@ -22,6 +22,9 @@ class Article extends AbstractEntity
 
 
 
+	/** @ORM\Column(type="integer", unique=true) */
+	private int $wikiId;
+
 	/** @ORM\Column(type="string", length=255, nullable=FALSE, unique=false) */
 	private string $heading;
 
@@ -31,8 +34,28 @@ class Article extends AbstractEntity
 	/** @ORM\Column(type="text", nullable=FALSE, unique=false) */
 	private string $sourceContent;
 
+	/** @ORM\Column(type="string", nullable=TRUE, unique=false) */
+	private ?string $picture=null;
+
 	/** @ORM\Column(type="integer", nullable=FALSE, unique=false, options={"default":0}) */
 	private int $status = 0;
+
+	public function getWikiId(): int
+	{
+		return $this->wikiId;
+	}
+	public function getWikiUrl(): string
+	{
+		return 'https://cs.wikipedia.org/?curid=' . $this->wikiId;
+	}
+
+	public function setWikiId(int $wikiId): Article
+	{
+		$this->wikiId = $wikiId;
+		return $this;
+	}
+
+
 
 	public function getHeading(): string
 	{
@@ -77,5 +100,20 @@ class Article extends AbstractEntity
 		$this->status = $status;
 		return $this;
 	}
+
+	public function getPicture(): ?string
+	{
+		return $this->picture;
+	}
+
+	public function setPicture(?string $picture): Article
+	{
+		$this->picture = $picture;
+		return $this;
+	}
+
+
+
+
 
 }
