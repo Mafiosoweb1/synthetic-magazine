@@ -1,0 +1,28 @@
+{varType App\Model\Database\Entity\Article $article}
+<div class="card mb-3 bg-dark">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-9">
+				<h5 class="card-title">{$article->getHeading()}</h5>
+				<p class="card-text">{$article->getContent()|breaklines}</p>
+				<p class="card-text">
+					<span class="badge bg-info">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$article->getCategoryId()]}</span>
+					<span class="badge bg-secondary">{$article->getCreatedAt()->format('d.m.Y H:i')}</span>
+				</p>
+			</div>
+			<div class="col-3">
+				<div class="img-thumbnail">
+					<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
+					<div class="text-muted text-center mt-1">
+						<small>
+							TODO zdroj obrázku
+						</small>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+	</div>
+</div>

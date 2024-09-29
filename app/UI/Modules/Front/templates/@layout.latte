@@ -4,15 +4,22 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" defer/>
 	<link rel="stylesheet" href="{$basePath}/assets/front.css" defer/>
 	<script src="{$basePath}/assets/front.js" defer></script>
-{/}
+{/block}
 
 {block #main}
 	<div class="container">
 		<header class="masthead">
 			<div class="inner">
-				<h3 class="masthead-brand" title="Synthetic Magazine"><img src="/favicon-32x32.png" alt=""></h3>
+				<h3 class="masthead-brand" title="Synthetic Magazine">
+					<a n:href=":Front:Home:default">
+						<img src="/favicon-32x32.png" alt="">
+					</a>
+				</h3>
 				<nav class="nav nav-masthead justify-content-center">
-					<a n:class="$presenter->isLinkCurrent(':Front:Home:') ? active, nav-link" n:href=":Front:Home:">Home</a>
+					<a n:class="$presenter->isLinkCurrent(':Front:Home:') ? active, nav-link" n:href=":Front:Home:default">Home</a>
+					{foreach \App\Model\Database\Entity\Article::CATEGORIES_ENABLED as $categoryId}
+						<a n:class="$presenter->isLinkCurrent(':Front:Home:category', $categoryId) ? active, nav-link" n:href="category, $categoryId">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$categoryId]}</a>
+					{/foreach}
 				</nav>
 			</div>
 		</header>
@@ -28,4 +35,4 @@
 			</div>
 		</footer>
 	</div>
-{/}
+{/block}

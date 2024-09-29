@@ -2,7 +2,9 @@
 
 namespace App\Model\Router;
 
+use App\Model\Database\Entity\Article;
 use Nette\Application\Routers\RouteList;
+use Nette\Utils\Strings;
 
 final class RouterFactory
 {
@@ -31,6 +33,14 @@ final class RouterFactory
 	protected function buildFront(): void
 	{
 		$this->router[] = $list = new RouteList('Front');
+		foreach (Article::CATEGORIES_ENABLED as $categoryId) {
+			$list->addRoute('/' . Strings::webalize(Article::CATEGORIES_NAMES[$categoryId]) . '[/<page>]', [
+				'presenter' => 'Home',
+				'action' => 'category',
+				'categoryId' => $categoryId,
+			]);
+		}
+
 		$list->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 	}
 

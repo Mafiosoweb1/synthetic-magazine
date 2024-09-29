@@ -16,5 +16,21 @@ final class HomePresenter extends BaseFrontPresenter
 		$articles = $this->entityManager->getArticleRepository()->findBy(['status' => Article::STATUS_PUBLISHED], ['updatedAt' => 'DESC'], 10);
 		$this->getTemplate()->articles = $articles;
 	}
+	/**
+	 * @throws NotSupported
+	 */
+	public function actionCategory(int $categoryId): void
+	{
+		$articles = $this->entityManager->getArticleRepository()->findBy(
+			[
+				'status' => Article::STATUS_PUBLISHED,
+				'categoryId' => $categoryId
+			],
+			['updatedAt' => 'DESC'],
+			10
+		);
+		$this->getTemplate()->articles = $articles;
+		$this->getTemplate()->categoryName = Article::CATEGORIES_NAMES[$categoryId];
+	}
 
 }
