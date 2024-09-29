@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Console;
 
@@ -25,6 +25,7 @@ class ArticleGenerateCommand extends Command
 	{
 		$this->setName(self::NAME);
 		$this->setDescription('Creates article from sourceContent.');
+		$this->addArgument("count", null, "Count of articles to generate", 1);
 	}
 
 	public function __construct(EntityManagerDecorator $entityManager)
@@ -38,58 +39,78 @@ class ArticleGenerateCommand extends Command
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+		$count = $input->getArgument('count');
 		$openAi = new OpenAi(getenv('CHAT_GPT_API_KEY'));
 
 		#$list = $openAi->listModels();
 		$model = 'gpt-4o-mini';
 
-		$article = $this->entityManager->getArticleRepository()
-			->findOneBy(
-				[
-					'heading' => '',
-					'content' => '',
-				]
-			);
 
-		if(!$article instanceof Article) {
+		$articles = $this->entityManager->createQueryBuilder()
+			->from(Article::class, 'a')
+			->select('a')
+			->where('a.heading = :heading')
+			->andWhere('a.content = :content')
+			->andWhere('a.picture IS NOT null')
+			->setParameter('heading', '')
+			->setParameter('content', '')
+			->setMaxResults($count)
+			->getQuery()
+			->getResult();
+
+
+		if (count($articles) == 0) {
 			$output->writeln('All articles are generated.');
 			return 0;
 		}
 
-		$complete = $openAi->chat([
-			'model' => $model,
-			'messages' => [
-				[
-					"role" => "user",
-					"content" =>
-						"Ahoj, dělám momentálně článek pro magazín se zajímavostmi a potřebuji vygenerovat
-						jeho nadpis a obsah.  Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
-						jako JSON soubor, s klíči heading a content, json musi byt validni a nemel by obsahovat
-						žádné anotace '```json {' a podobně.
-						Pokud budeš vědět nějákou zajímavost, tak ji můžeš přidat do obsahu.
-						Cílem je aby článek byl pro lidi zajímavý a přitažlivý.
+		$categoryText = "";
+		foreach (Article::CATEGORIES_NAMES_GPT as $key => $value) {
+			$categoryText .= '"' . $value . '": ' . $key . ", ";
+		}
+		foreach ($articles as $article) {
 
 
-						------
-						" .$article->getSourceContent(),
+
+			$complete = $openAi->chat([
+				'model' => $model,
+				'messages' => [
+					[
+						"role" => "user",
+						"content" =>
+							"Ahoj, dělám momentálně článek pro magazín se zajímavostmi a potřebuji vygenerovat
+jeho nadpis a obsah.  Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
+jako JSON soubor, s klíči heading, content a categoryId, json musi byt validni a nemel by obsahovat
+žádné anotace '```json {' a podobně.
+Do categoryId vyplň číslo kategorie, která odpovídá obsahu: " . $categoryText . " podle tvého vygenerovaného obsahu.
+Pokud budeš vědět nějákou zajímavost, tak ji můžeš přidat do obsahu.
+Cílem je aby článek byl pro lidi zajímavý a přitažlivý.
+Do hlavního textu můžeš použít smajlíky a emotikony, ale ne příliš.
+----------
+Nadpis: " . $article->getSourceHeading() . "
+Text: " . $article->getSourceContent(),
+					],
 				],
-			],
-		]);
+			]);
 
-		$result = json_decode($complete, true);
-		$resultTextJson = $result['choices'][0]['message']['content'];
-		$resultText = json_decode($resultTextJson, true);
+			$result = json_decode($complete, true);
+			$resultTextJson = $result['choices'][0]['message']['content'];
+			$resultText = json_decode($resultTextJson, true);
 
 
-		$article->setHeading($resultText['heading']);
-		$article->setContent($resultText['content']);
-		$article->setStatus(Article::STATUS_PUBLISHED);
-		$article->setUpdatedAt();
+			$article->setHeading($resultText['heading']);
+			$article->setContent($resultText['content']);
+			$article->setCategoryId($resultText['categoryId']);
+			$article->setStatus(Article::STATUS_PUBLISHED);
+			$article->setUpdatedAt();
 
-		$this->entityManager->persist($article);
-		$this->entityManager->flush();
+			$this->entityManager->persist($article);
+			$this->entityManager->flush();
 
-		$output->writeln('Article generated.');
+
+			$output->writeln('Article generated.');
+		}
+
 
 		return 0;
 	}

@@ -10,7 +10,8 @@
 						<h5 class="card-title">{$article->getHeading()}</h5>
 						<p class="card-text">{$article->getContent()|breaklines}</p>
 						<p class="card-text">
-							<small class="text-muted">{$article->getCreatedAt()->format('d.m.Y H:i')}</small>
+							<span class="badge bg-info">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$article->getCategoryId()]}</span>
+							<span class="badge bg-secondary">{$article->getCreatedAt()->format('d.m.Y H:i')}</span>
 						</p>
 					</div>
 					<div class="col-3">

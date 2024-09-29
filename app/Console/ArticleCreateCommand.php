@@ -92,45 +92,28 @@ class ArticleCreateCommand extends Command
 			$foundValidImage = false; // Flag pro určení, zda byl nalezen platný obrázek
 			$pictureUrl = null;
 
-//			if (isset($page['images'])) {
-//				// Iterace přes obrázky a kontrola, zda je platný
-//				foreach ($page['images'] as $image) {
-//					$imageName = $image['title'];
-//
-//
-//					// Pokud je obrázek platný, zpracujeme jej
-//					if ($this->isValidImage($imageName)) {
-//						// Získání URL obrázku
-//						$imageInfoUrl = new Url('https://cs.wikipedia.org/w/api.php');
-//						$imageInfoUrl->setQueryParameter('action', 'query');
-//						$imageInfoUrl->setQueryParameter('titles', $imageName);
-//						$imageInfoUrl->setQueryParameter('prop', 'imageinfo');
-//						$imageInfoUrl->setQueryParameter('iiprop', 'url');
-//						$imageInfoUrl->setQueryParameter('format', 'json');
-//
-//						$imageData = FileSystem::read($imageInfoUrl->getAbsoluteUrl());
-//						$imageInfo = json_decode($imageData, true);
-//
-//						// Iterace přes vrácené stránky obrázků
-//						foreach ($imageInfo['query']['pages'] as $imagePage) {
-//							if (isset($imagePage['imageinfo'])) {
-//								// Výpis URL prvního platného obrázku
-//								//echo "URL prvního platného obrázku: " . $imagePage['imageinfo'][0]['url'] . "\n";
-//								$pictureUrl = $imagePage['imageinfo'][0]['url'];
-//								$foundValidImage = true; // Označení, že jsme našli platný obrázek
-//								break; // Přerušíme cyklus, jelikož chceme jen první platný obrázek
-//							}
-//						}
-//
-//						if ($foundValidImage) {
-//							break; // Přerušíme cyklus, pokud jsme našli platný obrázek
-//						}
-//					}
-//				}
-//			}
+
 			//dumpe($page);
-			if (isset($page['original'])) {
-				$pictureUrl= $page['original']['source'];
+			if (isset($page['original']) && isset($page['original']['source'])) {
+				//koncovka musí být obrázek
+				$exeptions = [
+					'.svg',
+					'.gif',
+					'.jpeg',
+					'.webp',
+					'.png',
+					'.jpg',
+				];
+				$foundValidImage = false;
+				foreach ($exeptions as $exeption) {
+					if (str_ends_with($page['original']['source'], $exeption)) {
+						$foundValidImage = true;
+						break;
+					}
+				}
+				if ($foundValidImage) {
+					$pictureUrl = $page['original']['source'];
+				}
 			}
 
 
@@ -150,6 +133,7 @@ class ArticleCreateCommand extends Command
 			$article->setContent('');
 			$article->setWikiId($page['pageid']);
 			$article->setPicture($pictureUrl);
+			$article->setSourceHeading($page['title']);
 			$article->setSourceContent($page['extract']);
 			$article->setStatus(Article::STATUS_CONCEPT);
 			$this->entityManager->persist($article);
