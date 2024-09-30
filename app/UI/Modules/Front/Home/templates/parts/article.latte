@@ -12,10 +12,13 @@
 			</div>
 			<div class="col-3">
 				<div class="img-thumbnail">
-					<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
+					<a href="{$article->getPicture()}" target="_blank" rel="noopener noreferrer">
+						<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
+					</a>
 					<div class="text-muted text-center mt-1">
 						<small>
-							TODO zdroj obrázku
+							<a class="btn-secondary" href="https://cs.wikipedia.org/?curid={$article->getWikiId()}"
+							   target="_blank">Odkaz na článek</a>
 						</small>
 					</div>
 				</div>
