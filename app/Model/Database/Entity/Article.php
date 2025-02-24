@@ -94,7 +94,6 @@ class Article extends AbstractEntity
 	/** @ORM\Column(type="text", nullable=FALSE, unique=false) */
 	private string $content;
 
-
 	/** @ORM\Column(type="string", length=255, nullable=FALSE, unique=false) */
 	private string $sourceHeading;
 

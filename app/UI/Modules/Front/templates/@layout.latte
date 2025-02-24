@@ -1,7 +1,7 @@
 {layout '../../Base/templates/@layout.latte'}
 
 {block #head}
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" defer/>
+	<link rel="stylesheet" href="{$basePath}/assets/bootstrap.min.css" defer/>
 	<link rel="stylesheet" href="{$basePath}/assets/front.css" defer/>
 	<script src="{$basePath}/assets/front.js" defer></script>
 	<script src="{$basePath}/assets/fslightbox.js" defer></script>
@@ -9,7 +9,7 @@
 {/block}
 
 {block #main}
-	<div class="container">
+	<div class="container-fluid d-flex flex-column">
 		<header class="masthead">
 			<div class="inner">
 				<h3 class="masthead-brand" title="Synthetic Magazine">
@@ -23,15 +23,18 @@
 						<a n:class="$presenter->isLinkCurrent(':Front:Home:category', $categoryId) ? active, nav-link" n:href="category, $categoryId">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$categoryId]}</a>
 					{/foreach}
 				</nav>
+				<div class="clearfix"></div>
 			</div>
 		</header>
 
 
-		<main role="main" class="inner">
-			{include content}
-		</main>
+		<div class="container">
+			<main role="main" class="inner">
+				{include content}
+			</main>
+		</div>
 
-		<footer class="mastfoot mt-auto">
+		<footer class="mastfoot p-3 mt-auto text-center">
 			<div class="inner">
 				&copy; {=date('Y')} Synthetic Magazine, All rights reserved
 			</div>

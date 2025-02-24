@@ -1,19 +1,18 @@
 {varType App\Model\Database\Entity\Article $article}
-<div class="card mb-3 bg-dark">
+<div class="mb-3 jumbotron p-0 p-md-3">
 	<div class="card-body">
 		<div class="row">
 			<div class="col-12">
-				<div class="float-right">
-					<div class="img-thumbnail thumbnail-image">
-						<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
-					</div>
+				<div class="float-right img-thumbnail thumbnail-image">
+					<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
 				</div>
 
 				<h5 class="card-title">{$article->getHeading()}</h5>
 				<p class="card-text">{$article->getContent()|breaklines|truncate:250}</p>
 
 				<p class="card-text">
-					<a n:href=":Front:Home:article, id: $article->getId()" class="btn btn-primary stretched-link">Číst více</a>
+					<a n:href=":Front:Home:article, id: $article->getId()" class="btn btn-primary stretched-link">Číst
+						více</a>
 				</p>
 
 				<p class="card-text">

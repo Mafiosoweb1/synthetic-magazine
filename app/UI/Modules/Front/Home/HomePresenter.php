@@ -13,8 +13,22 @@ final class HomePresenter extends BaseFrontPresenter
 	 */
 	public function actionDefault(int $page=1): void
 	{
-		$articles = $this->entityManager->getArticleRepository()->findBy(['status' => Article::STATUS_PUBLISHED], ['updatedAt' => 'DESC'], 10, ($page - 1) * 10);
-		$articlesCount = $this->entityManager->getArticleRepository()->count(['status' => Article::STATUS_PUBLISHED]);
+		$articles = $this->entityManager->getArticleRepository()->findBy(
+			[
+				'status' => Article::STATUS_PUBLISHED,
+				'categoryId' => Article::CATEGORIES_ENABLED
+			],
+			[
+				'updatedAt' => 'DESC'
+			],
+			10,
+			($page - 1) * 10)
+		;
+		$articlesCount = $this->entityManager->getArticleRepository()->count(
+			[
+				'status' => Article::STATUS_PUBLISHED,
+				'categoryId' => Article::CATEGORIES_ENABLED
+			]);
 		$pages = ceil($articlesCount / 10);
 		$this->getTemplate()->articles = $articles;
 		$this->getTemplate()->articlesCount = $articlesCount;

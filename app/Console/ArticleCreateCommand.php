@@ -70,93 +70,89 @@ class ArticleCreateCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 
-		//nacteme clanky z wiki API
-		$url = new Url('https://cs.wikipedia.org/w/api.php');
-		$url->setQueryParameter('action', 'query');
-		$url->setQueryParameter('generator', 'random');
-		$url->setQueryParameter('grnnamespace', '0');
-		$url->setQueryParameter('grnlimit', '1');
-		$url->setQueryParameter('prop', 'extracts|pageimages');
-		$url->setQueryParameter('exintro', '');
-		$url->setQueryParameter('explaintext', '');
-		$url->setQueryParameter('piprop', 'original');
-		$url->setQueryParameter('format', 'json');
-
-		$wikiData = FileSystem::read($url->getAbsoluteUrl());
-		$wikiList = json_decode($wikiData, true);
-		//dump($wikiList);
+		$count = $input->getArgument('count');
+		for ($i = 0; $i <= $count; $i++) {
 
 
+			//nacteme clanky z wiki API
+			$url = new Url('https://cs.wikipedia.org/w/api.php');
+			$url->setQueryParameter('action', 'query');
+			$url->setQueryParameter('generator', 'random');
+			$url->setQueryParameter('grnnamespace', '0');
+			$url->setQueryParameter('grnlimit', '1');
+			$url->setQueryParameter('prop', 'extracts|pageimages');
+			$url->setQueryParameter('exintro', '');
+			$url->setQueryParameter('explaintext', '');
+			$url->setQueryParameter('piprop', 'original');
+			$url->setQueryParameter('format', 'json');
 
+			$wikiData = FileSystem::read($url->getAbsoluteUrl());
+			$wikiList = json_decode($wikiData, true);
+			//dump($wikiList);
 
 
 // Iterace přes články
-		foreach ($wikiList['query']['pages'] as $page) {
-			$foundValidImage = false; // Flag pro určení, zda byl nalezen platný obrázek
-			$pictureUrl = null;
+			foreach ($wikiList['query']['pages'] as $page) {
+				$foundValidImage = false; // Flag pro určení, zda byl nalezen platný obrázek
+				$pictureUrl = null;
 
 
-			//dumpe($page);
-			if (isset($page['original']) && isset($page['original']['source'])) {
-				//koncovka musí být obrázek
-				$exeptions = [
-					'.svg',
-					'.gif',
-					'.jpeg',
-					'.webp',
-					'.png',
-					'.jpg',
-				];
-				$foundValidImage = false;
-				foreach ($exeptions as $exeption) {
-					if (str_ends_with($page['original']['source'], $exeption)) {
-						$foundValidImage = true;
-						break;
+				//dumpe($page);
+				if (isset($page['original']) && isset($page['original']['source'])) {
+					//koncovka musí být obrázek
+					$exeptions = [
+						'.svg',
+						'.gif',
+						'.jpeg',
+						'.webp',
+						'.png',
+						'.jpg',
+					];
+					$foundValidImage = false;
+					foreach ($exeptions as $exeption) {
+						if (str_ends_with($page['original']['source'], $exeption)) {
+							$foundValidImage = true;
+							break;
+						}
+					}
+					if ($foundValidImage) {
+						$pictureUrl = $page['original']['source'];
 					}
 				}
-				if ($foundValidImage) {
-					$pictureUrl = $page['original']['source'];
+
+				//1/ is short
+				if (strlen($page['extract']) < 100) {
+					continue;
+				}
+				//2/ contains "Rozcestník" in title or extract - use str_contains
+				if (str_contains($page['title'], 'Rozcestník') || str_contains($page['extract'], 'Rozcestník')) {
+					continue;
+				}
+
+				$article = new Article();
+				$article->setCreatedAt();
+				$article->setHeading('');
+				$article->setContent('');
+				$article->setWikiId($page['pageid']);
+				$article->setPicture($pictureUrl);
+				$article->setSourceHeading($page['title']);
+				$article->setSourceContent($page['extract']);
+				$article->setStatus(Article::STATUS_CONCEPT);
+				$this->entityManager->persist($article);
+
+				dump($page);
+
+
+				try {
+					$this->entityManager->flush();
+				} catch (Exception $e) {
+					$output->writeln('Error: ' . $e->getMessage());
+					continue;
 				}
 			}
 
-
-
-			//test quality of article TODO NOT WORKING
-
-			//1/ is short
-			if (strlen($page['extract']) < 100) {
-				continue;
-			}
-			//2/ contains "Rozcestník" in title or extract - use str_contains
-			if (str_contains($page['title'], 'Rozcestník') || str_contains($page['extract'], 'Rozcestník')) {
-				continue;
-			}
-
-			$article = new Article();
-			$article->setCreatedAt();
-			$article->setHeading('');
-			$article->setContent('');
-			$article->setWikiId($page['pageid']);
-			$article->setPicture($pictureUrl);
-			$article->setSourceHeading($page['title']);
-			$article->setSourceContent($page['extract']);
-			$article->setStatus(Article::STATUS_CONCEPT);
-			$this->entityManager->persist($article);
-
-			dump($page);
-
-
-
-			try {
-				$this->entityManager->flush();
-			} catch (Exception $e) {
-				$output->writeln('Error: ' . $e->getMessage());
-				continue;
-			}
+			$output->writeln('Article created.');
 		}
-
-		$output->writeln('Article created.');
-
 		return 0;
 	}
 

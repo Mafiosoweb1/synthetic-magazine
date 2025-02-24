@@ -13,10 +13,7 @@ a:hover {
 .btn-secondary,
 .btn-secondary:hover,
 .btn-secondary:focus {
-	color: #333;
 	text-shadow: none; /* Prevent inheritance from `body` */
-	background-color: #fff;
-	border: .05rem solid #fff;
 }
 
 
@@ -30,15 +27,14 @@ html{
 html,
 body {
 	min-height: 100%;
-	background-color: #333;
 }
 
 body {
 	display: -ms-flexbox;
 	display: flex;
-	color: #fff;
 	text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
 	box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+	background: #38333B;
 }
 
 /*.cover-container {*/
@@ -56,6 +52,14 @@ main {
  */
 .masthead {
 	margin-bottom: 2rem;
+	padding: 1rem;
+	position: sticky;
+	top: 0;
+	z-index: 999;
+	background: #38333B;
+	border-bottom-left-radius: .5rem;
+	border-bottom-right-radius: .5rem;
+
 }
 
 .masthead-brand {
@@ -107,17 +111,31 @@ main {
 	font-weight: 700;
 }
 
+.cover-heading {
+	color: #fff;
+}
+
 .cover p a {
 	font-weight: bold;
 	text-decoration: underline;
 }
 .thumbnail-image {
 	margin: 0 0 0 1rem;
+	@media (max-width: 768px) {
+		margin: 0 0 1rem 0;
+	}
 }
 .thumbnail-image img {
 	width: 320px;
 	height: 240px;
 	object-fit: contain;
+	@media (max-width: 768px) {
+		width: 100%;
+		height: auto;
+	}
+}
+.jumbotron {
+	color: #fff;
 }
 
 .fslightbox-source {
@@ -130,6 +148,7 @@ main {
  */
 .mastfoot {
 	color: rgba(255, 255, 255, .5);
+	background: #4e5d6c;
 }
 
 .bd-placeholder-img {
