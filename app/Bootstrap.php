@@ -24,6 +24,9 @@ final class Bootstrap
 		// According to NETTE_DEBUG env
 		$configurator->setEnvDebugMode();
 
+		//disable TRACY and etc...
+		//$configurator->setDebugMode(false);
+
 		// Enable tracy and configure it
 		$configurator->enableTracy(__DIR__ . '/../var/log');
 		Debugger::$errorTemplate = __DIR__ . '/../resources/tracy/500.phtml';
