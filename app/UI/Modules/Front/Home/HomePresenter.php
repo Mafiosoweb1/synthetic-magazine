@@ -35,14 +35,46 @@ final class HomePresenter extends BaseFrontPresenter
 		$this->getTemplate()->pages = $pages;
 		$this->getTemplate()->page = $page;
 	}
+
+	/**
+	 * @throws NotSupported
+	 */
 	public function actionArticle(int $id): void
 	{
-		$article = $this->entityManager->getArticleRepository()->find($id);
+		$article = $this->entityManager->getArticleRepository()->findOneBy(
+			[
+				'id' => $id,
+				'status' => Article::STATUS_PUBLISHED
+			]
+		);
 		if ($article === null) {
 			$this->flashError('Článek nebyl nalezen');
 			$this->redirect('Home:default');
 		}
+
+		//3 související články
+		$relatedArticles = $this->entityManager->getArticleRepository()->findBy(
+			[
+				'status' => Article::STATUS_PUBLISHED,
+				'categoryId' => $article->getCategoryId(),
+			],
+			['updatedAt' => 'DESC'],
+			12
+		);
+
+		//without this articleId and max 3
+		$relatedArticles = array_filter($relatedArticles, function (Article $a) use ($id) {
+			return $a->getId() !== $id;
+		});
+		//random order
+		shuffle($relatedArticles);
+
+		//only3
+		$relatedArticles = array_slice($relatedArticles, 0, 6);
+
+
 		$this->getTemplate()->article = $article;
+		$this->getTemplate()->relatedArticles = $relatedArticles;
 	}
 	/**
 	 * @throws NotSupported

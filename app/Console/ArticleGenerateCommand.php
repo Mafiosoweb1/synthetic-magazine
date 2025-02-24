@@ -96,6 +96,11 @@ Text: " . $article->getSourceContent(),
 			$resultTextJson = $result['choices'][0]['message']['content'];
 			$resultText = json_decode($resultTextJson, true);
 
+			//if $resultText['heading'] is null, continue
+			if ($resultText['heading'] == null) {
+				continue;
+			}
+
 
 			$article->setHeading($resultText['heading']);
 			$article->setContent($resultText['content']);

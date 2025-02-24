@@ -1,0 +1,22 @@
+{varType App\Model\Database\Entity\Article $article}
+<div class="col-12 col-lg-4 mb-4">
+	<div class="mb-3 jumbotron p-0 p-md-3 h-100">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-12">
+					<div class="ratio ratio-16x9">
+						<div>
+							<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
+						</div>
+					</div>
+					<h5 class="card-title">
+						<a n:href=":Front:Home:article, id: $article->getId()" class="stretched-link">
+							{$article->getHeading()}
+						</a>
+					</h5>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

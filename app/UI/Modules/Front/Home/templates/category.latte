@@ -1,8 +1,16 @@
 {varType App\Model\Database\Entity\Article[] $articles}
 {varType string $categoryName}
+{varType int $page}
+
+{block #title}{$categoryName}{/block}
 
 {block #content}
-	<h2 class="cover-heading">{$categoryName}</h2>
+	<h2 class="cover-heading">
+		{$categoryName}
+		{if $page > 1}
+			<small class="text-muted">- strana {$page}</small>
+		{/if}
+	</h2>
 	{foreach $articles as $article}
 		{include 'parts/article.latte',article: $article}
 	{/foreach}

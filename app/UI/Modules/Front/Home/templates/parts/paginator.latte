@@ -2,21 +2,53 @@
 {varType int $pages}
 {varType int $page}
 
-<ul class="pagination justify-content-end">
-	<li class="page-item {if $page == 1}disabled{/if}">
-		<a class="page-link" n:href="this, page: $page - 1">Předchozí</a>
-	</li>
-	{for $i = 1; $i <= $pages; $i++}
-		<li class="page-item">
-			{if $i == $page}
-				<span class="page-link">{$i}</span>
-			{else}
-				<a class="page-link" n:href="this, page: $i">{$i}</a>
-			{/if}
-		</li>
+<div class="my-5">
 
-	{/for}
-	<li class="page-item {if $pages == $page} disabled{/if}">
-		<a class="page-link" n:href="this, page: $page + 1">Další</a>
-	</li>
-</ul>
+<span class="float-left text-white">
+	článků: {$articlesCount}
+</span>
+
+	{if $pages > 1}
+		<ul class="pagination justify-content-end">
+			<li class="page-item {if $page == 1}disabled{/if}">
+				<a class="page-link" n:href="this, page: $page - 1">Předchozí</a>
+			</li>
+
+			{var $start = max(1, $page - 3)}
+        {var $end = min($pages, $page + 3)}
+
+        {if $start > 1}
+				<li class="page-item d-none d-md-inline">
+					<a class="page-link" n:href="this, page: 1">1</a>
+				</li>
+				{if $start > 2}
+					<li class="page-item disabled d-none d-md-inline"><span class="page-link">...</span></li>
+				{/if}
+			{/if}
+
+        {for $i = $start; $i <= $end; $i++}
+				<li class="page-item d-none d-md-inline {if $i == $page}active{/if}">
+					{if $i == $page}
+						<span class="page-link">{$i}</span>
+					{else}
+						<a class="page-link" n:href="this, page: $i">{$i}</a>
+					{/if}
+				</li>
+			{/for}
+
+        {if $end < $pages}
+				{if $end < $pages - 1}
+					<li class="page-item disabled d-none d-md-inline"><span class="page-link">...</span></li>
+				{/if}
+				<li class="page-item d-none d-md-inline">
+					<a class="page-link" n:href="this, page: $pages">{$pages}</a>
+				</li>
+			{/if}
+
+			<li class="page-item {if $pages == $page}disabled{/if}">
+				<a class="page-link" n:href="this, page: $page + 1">Další</a>
+			</li>
+		</ul>
+	{/if}
+
+</div>

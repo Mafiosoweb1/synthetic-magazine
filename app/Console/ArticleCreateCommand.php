@@ -140,7 +140,7 @@ class ArticleCreateCommand extends Command
 				$article->setStatus(Article::STATUS_CONCEPT);
 				$this->entityManager->persist($article);
 
-				dump($page);
+				//dump($page);
 
 
 				try {
