@@ -59,6 +59,8 @@ main {
 	background: #3c5d8a;
 	border-bottom-left-radius: .5rem;
 	border-bottom-right-radius: .5rem;
+	box-shadow: 0 0 20px black;
+	box-shadow: 0 0 20px black;
 
 }
 
@@ -156,6 +158,8 @@ main {
 .mastfoot {
 	color: rgba(255, 255, 255, .5);
 	background: #4e5d6c;
+	border-top-left-radius: .5rem;
+	border-top-right-radius: .5rem;
 }
 
 .bd-placeholder-img {
