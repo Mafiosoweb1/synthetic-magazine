@@ -3,7 +3,6 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/Mafiosoweb1/synthetic-magazine)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Mafiosoweb1/synthetic-magazine)
 ![GitHub issues](https://img.shields.io/github/issues/Mafiosoweb1/synthetic-magazine)
-![GitHub forks](https://img.shields.io/github/forks/Mafiosoweb1/synthetic-magazine?style=social)
 ![GitHub stars](https://img.shields.io/github/stars/Mafiosoweb1/synthetic-magazine?style=social)
 
 ### ✨ AI-powered Article Generator
@@ -13,8 +12,11 @@ Synthetic Magazine is a powerful AI-driven article generator designed for seamle
 
 ## 🌟 Features
 ✅ **AI-powered content generation** – Create articles effortlessly using artificial intelligence.
+
 🌍 **Seamless web integration** – Easily publish articles online.
+
 ⚙️ **Highly configurable** – Customize the generated content to your specific needs.
+
 🚀 **Quick setup** – Get started with minimal effort.
 
 ---
@@ -33,9 +35,11 @@ Synthetic Magazine is a powerful AI-driven article generator designed for seamle
 	- Edit the `.env` file and update the API key for **ChatGPT**.
 
 4. **Run the project**:
-   ```sh
-   php -S localhost:8000 -t www
-   ```
+   - If you are using **docker** run it with  `docker-compose up ` else run the following command:
+
+```sh
+php -S localhost:8000 -t www
+```
 
 ---
 
@@ -57,8 +61,11 @@ Synthetic Magazine is a powerful AI-driven article generator designed for seamle
 
 ## 🏗️ Technologies Used
 🔹 PHP 8.1+
+
 🔹 `nette/*` packages
+
 🔹 Doctrine ORM via `nettrine/*`
+
 🔹 Symfony components via `contributte/*`
 
 ---
