@@ -1,0 +1,39 @@
+{varType App\Model\Database\Entity\Article $article}
+
+{block #content}
+	{dump $article}
+	{varType App\Model\Database\Entity\Article $article}
+	<div class="card mb-3 bg-dark">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-9">
+					<h1 class="card-title">{$article->getHeading()}</h1>
+					<p class="card-text">{$article->getContent()|breaklines}</p>
+
+					<p class="card-text">
+
+						<span class="badge bg-info">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$article->getCategoryId()]}</span>
+						<span class="badge bg-secondary">{$article->getUpdatedAt()->format('d.m.Y H:i')}</span>
+					</p>
+				</div>
+				<div class="col-3">
+					<div class="img-thumbnail">
+						<a href="{$article->getPicture()}" data-fslightbox target="_blank" rel="noopener noreferrer">
+							<img src="{$article->getPicture()}" class="card-img-top rounded" alt="{$article->getHeading()}">
+						</a>
+						<div class="text-muted text-center mt-1">
+							<small>
+								<a class="btn-secondary" href="https://cs.wikipedia.org/?curid={$article->getWikiId()}"
+								   target="_blank">Odkaz na zdroj</a>
+							</small>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	</div>
+
+{/block}

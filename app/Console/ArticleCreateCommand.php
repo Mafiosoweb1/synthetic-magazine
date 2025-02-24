@@ -26,8 +26,10 @@ class ArticleCreateCommand extends Command
 
 	protected function configure(): void
 	{
+		// Configure the command to accept 'count' as an argument
 		$this->setName(self::NAME);
 		$this->setDescription('Creates article from wiki.');
+		$this->addArgument("count", null, "Count of articles to create", 1);  // Ensure default is set to 1
 	}
 
 	public function __construct(EntityManagerDecorator $entityManager)
@@ -52,7 +54,7 @@ class ArticleCreateCommand extends Command
 
 		$disabledContains = [
 			'Flags of',
-			];
+		];
 		foreach ($disabledContains as $disabledContain) {
 			if (str_contains($imageName, $disabledContain)) {
 				return false;
@@ -67,12 +69,13 @@ class ArticleCreateCommand extends Command
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
+
 		//nacteme clanky z wiki API
 		$url = new Url('https://cs.wikipedia.org/w/api.php');
 		$url->setQueryParameter('action', 'query');
 		$url->setQueryParameter('generator', 'random');
 		$url->setQueryParameter('grnnamespace', '0');
-		$url->setQueryParameter('grnlimit', '10');
+		$url->setQueryParameter('grnlimit', '1');
 		$url->setQueryParameter('prop', 'extracts|pageimages');
 		$url->setQueryParameter('exintro', '');
 		$url->setQueryParameter('explaintext', '');
@@ -117,7 +120,8 @@ class ArticleCreateCommand extends Command
 			}
 
 
-			//test quality of article
+
+			//test quality of article TODO NOT WORKING
 
 			//1/ is short
 			if (strlen($page['extract']) < 100) {
@@ -129,6 +133,7 @@ class ArticleCreateCommand extends Command
 			}
 
 			$article = new Article();
+			$article->setCreatedAt();
 			$article->setHeading('');
 			$article->setContent('');
 			$article->setWikiId($page['pageid']);
@@ -138,7 +143,7 @@ class ArticleCreateCommand extends Command
 			$article->setStatus(Article::STATUS_CONCEPT);
 			$this->entityManager->persist($article);
 
-			//dump($page);
+			dump($page);
 
 
 

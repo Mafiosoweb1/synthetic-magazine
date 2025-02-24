@@ -6,4 +6,5 @@
 	{foreach $articles as $article}
 		{include 'parts/article.latte',article: $article}
 	{/foreach}
+	{include 'parts/paginator.latte'}
 {/block}

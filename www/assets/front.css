@@ -24,6 +24,9 @@ a:hover {
  * Base structure
  */
 
+html{
+	height: 100%;
+}
 html,
 body {
 	min-height: 100%;
@@ -107,6 +110,18 @@ main {
 .cover p a {
 	font-weight: bold;
 	text-decoration: underline;
+}
+.thumbnail-image {
+	margin: 0 0 0 1rem;
+}
+.thumbnail-image img {
+	width: 320px;
+	height: 240px;
+	object-fit: contain;
+}
+
+.fslightbox-source {
+	background: white;
 }
 
 

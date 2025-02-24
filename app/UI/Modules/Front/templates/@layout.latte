@@ -4,6 +4,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" defer/>
 	<link rel="stylesheet" href="{$basePath}/assets/front.css" defer/>
 	<script src="{$basePath}/assets/front.js" defer></script>
+	<script src="{$basePath}/assets/fslightbox.js" defer></script>
+
 {/block}
 
 {block #main}
@@ -24,14 +26,14 @@
 			</div>
 		</header>
 
+
 		<main role="main" class="inner">
 			{include content}
 		</main>
 
 		<footer class="mastfoot mt-auto">
 			<div class="inner">
-				&copy; {=date('Y')} Synthetic Magazine, All rights reserved,
-				<a n:class="$presenter->isLinkCurrent(':Admin:Home:') ? active" n:href=":Admin:Home:">Admin</a>
+				&copy; {=date('Y')} Synthetic Magazine, All rights reserved
 			</div>
 		</footer>
 	</div>

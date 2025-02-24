@@ -1,8 +1,10 @@
 {varType App\Model\Database\Entity\Article[] $articles}
+{varType int $articlesCount}
 
 {block #content}
 	<h2 class="cover-heading">Nejnovější články</h2>
 	{foreach $articles as $article}
 		{include 'parts/article.latte',article: $article}
 	{/foreach}
+	{include 'parts/paginator.latte'}
 {/block}

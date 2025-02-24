@@ -1,0 +1,22 @@
+{varType int $articlesCount}
+{varType int $pages}
+{varType int $page}
+
+<ul class="pagination justify-content-end">
+	<li class="page-item {if $page == 1}disabled{/if}">
+		<a class="page-link" n:href="this, page: $page - 1">Předchozí</a>
+	</li>
+	{for $i = 1; $i <= $pages; $i++}
+		<li class="page-item">
+			{if $i == $page}
+				<span class="page-link">{$i}</span>
+			{else}
+				<a class="page-link" n:href="this, page: $i">{$i}</a>
+			{/if}
+		</li>
+
+	{/for}
+	<li class="page-item {if $pages == $page} disabled{/if}">
+		<a class="page-link" n:href="this, page: $page + 1">Další</a>
+	</li>
+</ul>

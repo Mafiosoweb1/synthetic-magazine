@@ -34,12 +34,13 @@ final class RouterFactory
 	{
 		$this->router[] = $list = new RouteList('Front');
 		foreach (Article::CATEGORIES_ENABLED as $categoryId) {
-			$list->addRoute('/' . Strings::webalize(Article::CATEGORIES_NAMES[$categoryId]) . '[/<page>]', [
+			$list->addRoute('/' . Strings::webalize(Article::CATEGORIES_NAMES[$categoryId]) . '[/strana/<page>]', [
 				'presenter' => 'Home',
 				'action' => 'category',
 				'categoryId' => $categoryId,
 			]);
 		}
+		$list->addRoute('/strana/<page>', 'Home:default');
 
 		$list->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 	}

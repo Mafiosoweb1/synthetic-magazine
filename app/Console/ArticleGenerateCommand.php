@@ -71,7 +71,6 @@ class ArticleGenerateCommand extends Command
 		foreach ($articles as $article) {
 
 
-
 			$complete = $openAi->chat([
 				'model' => $model,
 				'messages' => [
