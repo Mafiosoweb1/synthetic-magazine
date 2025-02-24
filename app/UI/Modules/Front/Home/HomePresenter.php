@@ -3,6 +3,7 @@
 namespace App\UI\Modules\Front\Home;
 
 use App\Model\Database\Entity\Article;
+use App\Model\Utils\Strings;
 use App\UI\Modules\Front\BaseFrontPresenter;
 use Doctrine\ORM\Exception\NotSupported;
 
@@ -51,6 +52,13 @@ final class HomePresenter extends BaseFrontPresenter
 			$this->flashError('Článek nebyl nalezen');
 			$this->redirect('Home:default');
 		}
+
+
+		//je nalezen ale url neodpovida route "$list->addRoute('/clanek/<id>[-<heading>]', 'Home:article');" tak presmerujeme
+		if ($this->getParameter('heading') !== null && $this->getParameter('heading') !== Strings::webalize($article->getHeading())) {
+			$this->redirect('Home:article', ['id' => $id, 'heading' => Strings::webalize($article->getHeading())]);
+		}
+
 
 		//3 související články
 		$relatedArticles = $this->entityManager->getArticleRepository()->findBy(

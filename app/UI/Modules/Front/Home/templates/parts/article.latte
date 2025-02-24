@@ -11,8 +11,9 @@
 				<p class="card-text">{$article->getContent()|breaklines|truncate:250}</p>
 
 				<p class="card-text">
-					<a n:href=":Front:Home:article, id: $article->getId()" class="btn btn-primary stretched-link">Číst
-						více</a>
+					<a n:href=":Front:Home:article, id: $article->getId(), heading: Nette\Utils\Strings::webalize($article->getHeading())" class="btn btn-primary stretched-link">
+						Číst více
+					</a>
 				</p>
 
 				<p class="card-text">

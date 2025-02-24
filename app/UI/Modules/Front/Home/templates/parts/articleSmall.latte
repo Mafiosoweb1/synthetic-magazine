@@ -10,7 +10,7 @@
 						</div>
 					</div>
 					<h5 class="card-title">
-						<a n:href=":Front:Home:article, id: $article->getId()" class="stretched-link">
+						<a n:href=":Front:Home:article, id: $article->getId(), heading: Nette\Utils\Strings::webalize($article->getHeading())" class="stretched-link">
 							{$article->getHeading()}
 						</a>
 					</h5>

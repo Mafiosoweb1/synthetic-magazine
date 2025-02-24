@@ -42,6 +42,8 @@ final class RouterFactory
 		}
 		$list->addRoute('/strana/<page>', 'Home:default');
 
+		$list->addRoute('/clanek/<id>[-<heading>]', 'Home:article');
+
 		$list->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 	}
 
