@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-
 use App\Model\Database\Entity\Article;
 use App\Model\Database\EntityManagerDecorator;
 use Doctrine\ORM\EntityManager;
@@ -10,24 +9,29 @@ use Exception;
 use Orhanerday\OpenAi\OpenAi;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: self::NAME)]
+#[AsCommand(name: 'article:generate')]
 class ArticleGenerateCommand extends Command
 {
-
-	public const NAME = 'article:generate';
-
+	//entityManager slouží pro práci s databází
 	private EntityManagerDecorator $entityManager;
 
+	// Konfigurace příkazu/commandu
 	protected function configure(): void
 	{
-		$this->setName(self::NAME);
 		$this->setDescription('Generates article from sourceContent.');
-		$this->addArgument("count", null, "Count of articles to generate", 1);
+		$this->addArgument(
+			"count",
+			InputArgument::OPTIONAL,
+			"Count of articles to generate",
+			1
+		);
 	}
 
+	// Konstruktor třídy - Naplní EntityManager do třídy
 	public function __construct(EntityManagerDecorator $entityManager)
 	{
 		parent::__construct();
