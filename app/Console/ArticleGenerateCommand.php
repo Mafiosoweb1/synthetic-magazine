@@ -24,7 +24,7 @@ class ArticleGenerateCommand extends Command
 	protected function configure(): void
 	{
 		$this->setName(self::NAME);
-		$this->setDescription('Creates article from sourceContent.');
+		$this->setDescription('Generates article from sourceContent.');
 		$this->addArgument("count", null, "Count of articles to generate", 1);
 	}
 
@@ -77,14 +77,16 @@ class ArticleGenerateCommand extends Command
 					[
 						"role" => "user",
 						"content" =>
-							"Ahoj, dělám momentálně článek pro magazín se zajímavostmi a potřebuji vygenerovat
-jeho nadpis a obsah.  Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
-jako JSON soubor, s klíči heading, content a categoryId, json musi byt validni a nemel by obsahovat
-žádné anotace '```json {' a podobně.
-Do categoryId vyplň číslo kategorie, která odpovídá obsahu: " . $categoryText . " podle tvého vygenerovaného obsahu.
+"Vygeneruj článek pro magazín se zajímavostmi, konkrétně jeho nadpis a obsah.
+Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
+jako JSON soubor, s klíči heading, content a categoryId.
+Json musi byt validni a neměl by obsahovat žádné anotace '```json {' a podobně.
+Do categoryId vyplň číslo kategorie, která odpovídá obsahu: " . $categoryText . "
+a to dle tvého vygenerovaného obsahu.
+Potřebuji aby ta kategorie seděla co nejpřesněji podle toho obsahu.
 Pokud budeš vědět nějákou zajímavost, tak ji můžeš přidat do obsahu.
-Cílem je aby článek byl pro lidi zajímavý a přitažlivý.
-Do hlavního textu můžeš použít smajlíky a emotikony, ale ne příliš.
+Cílem je aby článek byl pro lidi zajímavý a přitažlivý, může být i lehce vtipný pokud to dané téma dovolí.
+Do hlavního textu můžeš použít smajlíky a emotikony, ale ne příliš, jen jako zajimavý element pro oko.
 ----------
 Nadpis: " . $article->getSourceHeading() . "
 Text: " . $article->getSourceContent(),

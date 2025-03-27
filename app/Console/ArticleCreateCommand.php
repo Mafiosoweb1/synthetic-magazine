@@ -2,66 +2,35 @@
 
 namespace App\Console;
 
-
 use App\Model\Database\Entity\Article;
 use App\Model\Database\EntityManagerDecorator;
 use App\Model\Utils\FileSystem;
-use Doctrine\ORM\EntityManager;
 use Exception;
 use Nette\Http\Url;
-use Nette\Utils\Strings;
-use Orhanerday\OpenAi\OpenAi;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: self::NAME)]
+#[AsCommand(name: 'article:create')]
 class ArticleCreateCommand extends Command
 {
-
-	public const NAME = 'article:create';
-
+	//entityManager slouží pro práci s databází
 	private EntityManagerDecorator $entityManager;
 
+	// Konfigurace příkazu/commandu
 	protected function configure(): void
 	{
-		// Configure the command to accept 'count' as an argument
-		$this->setName(self::NAME);
 		$this->setDescription('Creates article from wiki.');
-		$this->addArgument("count", null, "Count of articles to create", 1);  // Ensure default is set to 1
+		$this->addArgument("count", InputArgument::OPTIONAL, "Number of articles to create", false);
 	}
 
+	// Konstruktor třídy - Naplní EntityManager do třídy
 	public function __construct(EntityManagerDecorator $entityManager)
 	{
 		parent::__construct();
 		$this->entityManager = $entityManager;
-	}
-
-
-	// Funkce na kontrolu, zda je obrázek platný
-	protected function isValidImage($imageName)
-	{
-		$disabledEnds = [
-			'/Wiki_letter_w.svg',
-			'Soubor:Commons-logo.svg',
-		];
-		foreach ($disabledEnds as $disabledEnd) {
-			if (str_ends_with($imageName, $disabledEnd)) {
-				return false;
-			}
-		}
-
-		$disabledContains = [
-			'Flags of',
-		];
-		foreach ($disabledContains as $disabledContain) {
-			if (str_contains($imageName, $disabledContain)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	/**
@@ -71,8 +40,7 @@ class ArticleCreateCommand extends Command
 	{
 
 		$count = $input->getArgument('count');
-		for ($i = 0; $i <= $count; $i++) {
-
+		for ($i = 1; $i <= $count; $i++) {
 
 			//nacteme clanky z wiki API
 			$url = new Url('https://cs.wikipedia.org/w/api.php');
@@ -91,7 +59,7 @@ class ArticleCreateCommand extends Command
 			//dump($wikiList);
 
 
-// Iterace přes články
+			// Iterace přes články
 			foreach ($wikiList['query']['pages'] as $page) {
 				$foundValidImage = false; // Flag pro určení, zda byl nalezen platný obrázek
 				$pictureUrl = null;
