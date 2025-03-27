@@ -23,7 +23,12 @@ class ArticleCreateCommand extends Command
 	protected function configure(): void
 	{
 		$this->setDescription('Creates article from wiki.');
-		$this->addArgument("count", InputArgument::OPTIONAL, "Number of articles to create", false);
+		$this->addArgument(
+			"count",
+			InputArgument::OPTIONAL,
+			"Number of articles to create",
+			1
+		);
 	}
 
 	// Konstruktor třídy - Naplní EntityManager do třídy
