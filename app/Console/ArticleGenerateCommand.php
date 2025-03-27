@@ -43,86 +43,85 @@ class ArticleGenerateCommand extends Command
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
-		$count = $input->getArgument('count');
-		$openAi = new OpenAi(getenv('CHAT_GPT_API_KEY'));
-
-		#$list = $openAi->listModels();
-		$model = 'gpt-4o-mini';
-
-
+		//vytáhne všechny články, které mají prázdný nadpis, obsah a mají obrázek
 		$articles = $this->entityManager->createQueryBuilder()
 			->from(Article::class, 'a')
 			->select('a')
-			->where('a.heading = :heading')
-			->andWhere('a.content = :content')
+			->where('a.heading = :heading')->setParameter('heading', '')
+			->andWhere('a.content = :content')->setParameter('content', '')
 			->andWhere('a.picture IS NOT null')
-			->setParameter('heading', '')
-			->setParameter('content', '')
-			->setMaxResults($count)
+			->setMaxResults($input->getArgument('count')) //počet článků
 			->getQuery()
 			->getResult();
 
-
-		if (count($articles) == 0) {
+		if (count($articles) == 0) {  //pokud nejsou žádné články, končí
 			$output->writeln('All articles are generated.');
 			return 0;
 		}
 
+		foreach ($articles as $article) {
+			$result = $this->callChatGPT($article);
+			// test if $resultText['heading'] is null, continue
+			if ($result['heading'] == null) {
+				continue;
+			}
+			// uložení hodnot do článku
+			$article->setHeading($result['heading']);
+			$article->setContent($result['content']);
+			$article->setCategoryId($result['categoryId']);
+			$article->setStatus(Article::STATUS_PUBLISHED);
+			$article->setUpdatedAt();
+			//uložení článku, nejdříve do php, poté do databáze
+			$this->entityManager->persist($article);
+			$this->entityManager->flush();
+
+			$output->writeln('Article generated.');
+		}
+		$output->writeln('All articles generated.');
+		return 0;
+	}
+
+	/**
+	 * @param Article $article
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function callChatGPT(Article $article): mixed
+	{
+		//vytvoření textu pro kategorie z Article::CATEGORIES_NAMES_GPT
+		//kde je pole s kategoriemi a jejich čísly
 		$categoryText = "";
 		foreach (Article::CATEGORIES_NAMES_GPT as $key => $value) {
 			$categoryText .= '"' . $value . '": ' . $key . ", ";
 		}
-		foreach ($articles as $article) {
 
-
-			$complete = $openAi->chat([
-				'model' => $model,
-				'messages' => [
-					[
-						"role" => "user",
-						"content" =>
-"Vygeneruj článek pro magazín se zajímavostmi, konkrétně jeho nadpis a obsah.
-Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
-jako JSON soubor, s klíči heading, content a categoryId.
-Json musi byt validni a neměl by obsahovat žádné anotace '```json {' a podobně.
-Do categoryId vyplň číslo kategorie, která odpovídá obsahu: " . $categoryText . "
-a to dle tvého vygenerovaného obsahu.
-Potřebuji aby ta kategorie seděla co nejpřesněji podle toho obsahu.
-Pokud budeš vědět nějákou zajímavost, tak ji můžeš přidat do obsahu.
-Cílem je aby článek byl pro lidi zajímavý a přitažlivý, může být i lehce vtipný pokud to dané téma dovolí.
-Do hlavního textu můžeš použít smajlíky a emotikony, ale ne příliš, jen jako zajimavý element pro oko.
-----------
-Nadpis: " . $article->getSourceHeading() . "
-Text: " . $article->getSourceContent(),
-					],
+		$openAi = new OpenAi(getenv('CHAT_GPT_API_KEY'));
+		$model = 'gpt-4o-mini';
+		$complete = $openAi->chat([
+			'model' => $model,
+			'messages' => [
+				[
+					"role" => "user",
+					"content" =>
+						"Vygeneruj článek pro magazín se zajímavostmi, konkrétně jeho nadpis a obsah.
+	Poskytnu ti obsah na toto téma z Wikipedie a ty mi vrať odpověd
+	jako JSON soubor, s klíči heading, content a categoryId.
+	Json musi byt validni a neměl by obsahovat žádné anotace '```json {' a podobně.
+	Do categoryId vyplň číslo kategorie, která odpovídá obsahu: " . $categoryText . "
+	a to dle tvého vygenerovaného obsahu.
+	Potřebuji aby ta kategorie seděla co nejpřesněji podle toho obsahu.
+	Pokud budeš vědět nějákou zajímavost, tak ji můžeš přidat do obsahu.
+	Cílem je aby článek byl pro lidi zajímavý a přitažlivý, může být i lehce vtipný pokud to dané téma dovolí.
+	Do hlavního textu můžeš použít smajlíky a emotikony, ale ne příliš, jen jako zajimavý element pro oko.
+	----------
+	Nadpis: " . $article->getSourceHeading() . "
+	Text: " . $article->getSourceContent(),
 				],
-			]);
-
-			$result = json_decode($complete, true);
-			$resultTextJson = $result['choices'][0]['message']['content'];
-			$resultText = json_decode($resultTextJson, true);
-
-			//if $resultText['heading'] is null, continue
-			if ($resultText['heading'] == null) {
-				continue;
-			}
-
-
-			$article->setHeading($resultText['heading']);
-			$article->setContent($resultText['content']);
-			$article->setCategoryId($resultText['categoryId']);
-			$article->setStatus(Article::STATUS_PUBLISHED);
-			$article->setUpdatedAt();
-
-			$this->entityManager->persist($article);
-			$this->entityManager->flush();
-
-
-			$output->writeln('Article generated.');
-		}
-
-
-		return 0;
+			],
+		]);
+		$data = json_decode($complete, true);
+		//v $result['choices'][0]['message']['content'] je odpověď z chatGPT
+		return json_decode($data['choices'][0]['message']['content'], true);
 	}
 
 }
