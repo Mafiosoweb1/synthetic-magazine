@@ -1,56 +1,46 @@
 {varType App\Model\Database\Entity\Article $article}
 {varType App\Model\Database\Entity\Article[] $relatedArticles}
-
-{block #title}{$article->getHeading()}{/block}
+{varType App\Model\Database\Entity\Article $article}
 
 {block #content}
-	{varType App\Model\Database\Entity\Article $article}
 	<div class="mb-3 jumbotron p-3">
 		<div class="card-body">
 			<div class="row">
 				<div class="col-12 col-md-9">
-					<h1 class="card-title">{$article->getHeading()}</h1>
+					<h1 class="card-title" n:block="#title">{$article->getHeading()}</h1>
 					<p class="card-text">{$article->getContent()|breaklines}</p>
-
 					<p class="card-text">
-
 						<span class="badge bg-info">
 							<a n:href=":Front:Home:category, categoryId: $article->getCategoryId()">
-							{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$article->getCategoryId()]}
+								{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$article->getCategoryId()]}
 							</a>
 						</span>
 						<span class="badge bg-secondary">{$article->getUpdatedAt()->format('d.m.Y H:i')}</span>
 						<span class="badge bg-success">
-							<a href="https://cs.wikipedia.org/?curid={$article->getWikiId()}" target="_blank">Odkaz na zdroj</a>
+							<a href="https://cs.wikipedia.org/?curid={$article->getWikiId()}" target="_blank">
+								Odkaz na zdroj
+							</a>
 						</span>
 					</p>
 				</div>
 				<div class="col-12 col-md-3">
 					<div class="img-thumbnail">
 						<a href="{$article->getPicture()}" data-fslightbox target="_blank" rel="noopener noreferrer">
-							<img src="{$article->getPicture()}" class="card-img-top rounded"
-								 alt="{$article->getHeading()}">
+							<img src="{$article->getPicture()}" class="card-img-top rounded" alt="">
 						</a>
 						<div class="text-muted text-center mt-1">
-							<small>
-								Obrázek: {$article->getSourceHeading()}
-							</small>
+							<small>Obrázek: {$article->getSourceHeading()}</small>
 						</div>
 					</div>
 				</div>
-
 			</div>
-
-
 		</div>
 	</div>
 
 	<h2 class="cover-heading">Související články</h2>
-		<div class="row m-0 mb-3 p-0">
-			{foreach $relatedArticles as $relatedArticle}
-				{include 'parts/articleSmall.latte', article => $relatedArticle}
-			{/foreach}
-		</div>
-
-
+	<div class="row m-0 mb-3 p-0">
+		{foreach $relatedArticles as $relatedArticle}
+			{include 'parts/articleSmall.latte', article => $relatedArticle}
+		{/foreach}
+	</div>
 {/block}

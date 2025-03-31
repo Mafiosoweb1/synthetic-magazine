@@ -2,10 +2,8 @@
 {varType string $categoryName}
 {varType int $page}
 
-{block #title}{$categoryName}{/block}
-
 {block #content}
-	<h2 class="cover-heading">
+	<h2 class="cover-heading" n:block="#title">
 		{$categoryName}
 		{if $page > 1}
 			<small class="text-muted">- strana {$page}</small>

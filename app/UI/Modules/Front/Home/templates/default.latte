@@ -1,17 +1,14 @@
 {varType App\Model\Database\Entity\Article[] $articles}
-{varType int $articlesCount}
 {varType int $page}
 
-{block #title}Hlavní stránka{/block}
-
 {block #content}
-	<h2 class="cover-heading">
+	<h2 class="cover-heading" n:block="#title">
 		Nejnovější články
 		{if $page > 1}
 			<small class="text-muted">- strana {$page}</small>
 		{/if}
 	</h2>
-	{foreach $articles as $article}
+	{foreach $articles as $article} {* projdeme všechny články *}
 		{include 'parts/article.latte',article: $article}
 	{/foreach}
 	{include 'parts/paginator.latte'}

@@ -9,38 +9,45 @@
 {/block}
 
 {block #main}
-	<div class="container-fluid d-flex flex-column">
-		<header class="masthead">
+	<div class="container-fluid d-flex flex-column"> {* Začátek hlavního kontejneru *}
+		<header class="masthead"> {* Začátek hlavicky *}
 			<div class="inner">
 				<h3 class="masthead-brand" title="Synthetic Magazine">
 					<a n:href=":Front:Home:default">
-						<img src="/favicon-32x32.png" alt="">
-						<span class="d-none d-lg-inline">
+						<img src="/favicon-32x32.png" alt=""> {* logo webu *}
+						<span class="d-none d-lg-inline">  {* Název webu *}
 							Synthetic Magazine
 						</span>
 					</a>
 				</h3>
-				<nav class="nav nav-masthead justify-content-center">
-					<a n:class="$presenter->isLinkCurrent(':Front:Home:') ? active, nav-link" n:href=":Front:Home:default">Home</a>
+				<nav class="nav nav-masthead justify-content-center"> {* Navigace *}
+					<a n:class="$presenter->isLinkCurrent(':Front:Home:default') ? active, nav-link"
+					   n:href=":Front:Home:default">
+							{* Odkaz na domovskou stránku *}
+							{* n: = NETTE udělej odkaz do Front:Home:default *}
+							Home
+					</a>
+					{* Výpis kategorií *}
 					{foreach \App\Model\Database\Entity\Article::CATEGORIES_ENABLED as $categoryId}
-						<a n:class="$presenter->isLinkCurrent(':Front:Home:category', $categoryId) ? active, nav-link" n:href="category, $categoryId">{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$categoryId]}</a>
-					{/foreach}
-				</nav>
-				<div class="clearfix"></div>
+						<a n:class="$presenter->isLinkCurrent(':Front:Home:category', $categoryId) ? active, nav-link"
+						   n:href=":Front:Home:category, $categoryId">  {* Odkaz na kategorii *}
+								{\App\Model\Database\Entity\Article::CATEGORIES_NAMES[$categoryId]}  {* Název kat. *}
+						</a>
+					{/foreach} {* Konec výpisu kategorií *}
+				</nav> {* Konec navigace *}
 			</div>
-		</header>
+		</header> {* Konec hlavicky *}
 
-
-		<div class="container">
+		<div class="container"> {* Začátek obsahu *}
 			<main role="main" class="inner">
-				{include content}
+				{include content} {* Vložení obsahu *}
 			</main>
-		</div>
+		</div> {* Konec obsahu *}
 
-		<footer class="mastfoot p-3 mt-auto text-center">
+		<footer class="mastfoot p-3 mt-auto text-center"> {* Začátek patičky *}
 			<div class="inner">
 				&copy; {=date('Y')} Synthetic Magazine, All rights reserved, Mafiosoweb1
 			</div>
-		</footer>
+		</footer> {* Konec patičky *}
 	</div>
 {/block}
